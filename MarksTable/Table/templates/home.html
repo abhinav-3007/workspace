@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>Home Page</title>
+    <script
+    src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+    crossorigin="anonymous"></script>
+</head>
+<body class="container" style="margin-top:15px">
+    <form id="add-student" style="display:none">{% csrf_token %}
+        <div>
+            <p style="list-style-type:none">
+                <label>Enter the student's roll number:</label><br>
+                <input id="roll" name="roll" type="number">
+            </p>
+            <p style="list-style-type:none">
+                <label>Enter the student's name:</label><br>
+                <input id="name" name="name" type="text">
+            </p>
+            <p style="list-style-type:none">
+                <label>Enter the student's marks:</label><br>
+                <input id="marks" name="marks" type="number">
+            </p>
+            <label><input name="submit" type="submit" class="btn btn-primary"></label>
+        </div>
+    </form>
+    <form id="del-student" style="display:none">{% csrf_token %}
+        <div>
+            <p style="list-style-type:none">
+                <label>Enter the student's roll number:</label><br>
+                <input id="mks" name="name" type="number">
+            </p>
+            <label><input name="submit" type="submit" class="btn btn-primary"></label>
+        </div>
+    </form>
+    <input onclick="addClick()" value="Add/Update Student" type="button" class="btn btn-warning">
+    <input onclick="delClick()" value="Delete Student" type="button" class="btn btn-warning">
+    <hr style="background-color:black; height:2px;">
+    <table class="table table-sm table-bordered" style="text-align:center; width:500px;">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Marks</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</body>
+<script>
+    $(document).on('submit', '#add-student', function (e){
+        e.preventDefault()
+        $.ajax({
+            type: 'GET',
+            url: 'sender/',
+            success: function(data) {
+                console.log(data)
+            }
+        });
+    })
+
+
+    function addClick(){
+        var add = document.getElementById("add-student")
+        if(add.style.display == "block"){
+            add.style.display = "none"
+        }else{
+            add.style.display = "block"
+        }
+
+        var del = document.getElementById("del-student")
+        del.style.display = "none"
+    }
+
+
+    function delClick(){
+        var del = document.getElementById("del-student")
+        if(del.style.display == "block"){
+            del.style.display = "none"
+        }else{
+            del.style.display = "block"
+        }
+
+        var add = document.getElementById("add-student")
+        add.style.display = "none"
+    }
+
+
+    $(document).on('submit', '#add-student', function (e){
+        e.preventDefault()
+        $.ajax({
+            type: 'POST',
+            url: 'new-student/',
+            data: {
+                name:$('#name').val(),
+                marks:$('#marks').val(),
+                roll:$('#roll').val(),
+                csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
+            },
+<!--            success: function(alert) {-->
+<!--                if(alert == "fail"){-->
+<!--                    var alert = document.getElementById("fail")-->
+<!--                    alert.style.display = "block"-->
+<!--                }else{-->
+<!--                    window.location.href = '../home'-->
+<!--                }-->
+<!--            }-->
+        });
+    })
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</html>
